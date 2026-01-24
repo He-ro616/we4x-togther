@@ -18,16 +18,16 @@ export function Footer() {
               Empowering tech communities to connect, learn, and grow together.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://github.com/we4x-together" className="text-muted-foreground hover:text-primary transition-colors">
                 <Github className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://x.com/we4x_Together" className="text-muted-foreground hover:text-primary transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://www.linkedin.com/company/we4x/" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="we4xcommunity@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
