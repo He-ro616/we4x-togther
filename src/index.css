@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* We4X Brand Colors - Light Mode (adjust for a proper light theme if needed, currently mimicking dark structure) */
+    --background: 220 20% 12%; /* Darker background */
+    --foreground: 210 40% 98%; /* Light text */
+
+    --card: 220 18% 16%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 18% 16%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 185 85% 38%; /* Deep Teal/Cyan */
+    --primary-foreground: 220 20% 98%;
+
+    --secondary: 210 10% 20%; /* Dark Cool Gray */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 10% 25%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 270 70% 55%; /* Vibrant Purple */
+    --accent-foreground: 220 20% 98%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 10% 30%;
+    --input: 210 10% 25%;
+    --ring: 185 85% 38%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --glow-primary: 185 85% 38%;
+    --glow-secondary: 270 70% 55%;
+    --gradient-start: 185 85% 38%;
+    --gradient-end: 270 70% 55%;
+    --surface-elevated: 220 18% 18%;
+    --surface-overlay: 220 18% 14%;
+    
+    /* Sidebar */
+    --sidebar-background: 220 18% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 185 85% 38%;
+    --sidebar-primary-foreground: 220 20% 98%;
+    --sidebar-accent: 210 10% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 210 10% 30%;
+    --sidebar-ring: 185 85% 38%;
+  }
+
+  .dark {
+    /* We4X Brand Colors - Dark Mode (identical to root for consistent dark theme) */
+    --background: 220 20% 12%;
+    --foreground: 210 40% 98%;
+    --card: 220 18% 16%;
+    --card-foreground: 210 40% 98%;
+    --popover: 220 18% 16%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 185 85% 38%;
+    --primary-foreground: 220 20% 98%;
+    --secondary: 210 10% 20%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 10% 25%;
+    --muted-foreground: 215 20% 70%;
+    --accent: 270 70% 55%;
+    --accent-foreground: 220 20% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 10% 30%;
+    --input: 210 10% 25%;
+    --ring: 185 85% 38%;
+    --sidebar-background: 220 18% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 185 85% 38%;
+    --sidebar-primary-foreground: 220 20% 98%;
+    --sidebar-accent: 210 10% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 210 10% 30%;
+    --sidebar-ring: 185 85% 38%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.3),
+                0 0 60px hsl(var(--glow-primary) / 0.1);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 20px hsl(var(--glow-primary) / 0.5),
+                 0 0 40px hsl(var(--glow-primary) / 0.3);
+  }
+
+  /* Gradient backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, 
+      hsl(var(--gradient-start)) 0%, 
+      hsl(var(--gradient-end)) 100%);
+  }
+
+  .gradient-border {
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                linear-gradient(135deg, hsl(var(--gradient-start) / 0.5), hsl(var(--gradient-end) / 0.5)) border-box;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, 
+      hsl(var(--gradient-start)) 0%, 
+      hsl(var(--gradient-end)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Surface variants */
+  .surface-elevated {
+    background: hsl(var(--surface-elevated));
+  }
+
+  .surface-overlay {
+    background: hsl(var(--surface-overlay));
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--glow-primary) / 0.5),
+                  0 0 80px hsl(var(--glow-primary) / 0.2);
+    }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+

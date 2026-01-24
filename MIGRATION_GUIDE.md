@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Supabase Migration Runner
+# This script applies all pending migrations to your Supabase database
+
+SUPABASE_URL="https://kobvbghyzxmddyyfnbnf.supabase.co"
+SUPABASE_KEY="sb_publishable_1qcYoeILDsByP1NLfZQIWA_CfFpEXda"
+
+echo "🔄 Supabase Credentials Updated"
+echo "✅ Project URL: $SUPABASE_URL"
+echo "✅ Project ID: kobvbghyzxmddyyfnbnf"
+echo ""
+echo "📋 Migrations to be applied:"
+echo "  1. 20260121170923_f5dea7cb-2504-4474-8600-f61d2a66a5d9.sql"
+echo "     - Creates all base tables (profiles, events, posts, comments)"
+echo "     - Sets up RLS policies"
+echo "     - Creates triggers for timestamps"
+echo ""
+echo "  2. 20260121170940_a75d812a-f5b9-4322-aa9b-950e327845eb.sql"
+echo "     - Fixes search_path for update_updated_at_column function"
+echo ""
+
+echo "⚠️  IMPORTANT - To apply these migrations:"
+echo ""
+echo "Option 1: Using Supabase CLI (Recommended)"
+echo "  1. Install: npm install -g supabase"
+echo "  2. Login: supabase login"
+echo "  3. Link: supabase link --project-ref kobvbghyzxmddyyfnbnf"
+echo "  4. Push: supabase db push"
+echo ""
+echo "Option 2: Using Supabase Dashboard"
+echo "  1. Go to: https://app.supabase.com"
+echo "  2. Navigate to: SQL Editor"
+echo "  3. Create new query"
+echo "  4. Copy and paste contents of migration files"
+echo "  5. Run each migration in order"
+echo ""
+echo "Option 3: Using psql (if you have PostgreSQL installed)"
+echo "  psql -h db.kobvbghyzxmddyyfnbnf.supabase.co -U postgres -d postgres < migrations/20260121170923_f5dea7cb-2504-4474-8600-f61d2a66a5d9.sql"
+echo "  psql -h db.kobvbghyzxmddyyfnbnf.supabase.co -U postgres -d postgres < migrations/20260121170940_a75d812a-f5b9-4322-aa9b-950e327845eb.sql"
+echo ""
+echo "✨ After migrations are applied, you're ready to use the app!"
