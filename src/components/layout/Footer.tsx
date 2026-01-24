@@ -27,7 +27,7 @@ export function Footer() {
               <a href="https://www.linkedin.com/company/we4x/" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="we4xcommunity@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:we4xcommunity@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
