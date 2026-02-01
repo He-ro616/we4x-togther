@@ -145,7 +145,7 @@ export default function AdminAnalytics() {
 
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto pt-20">
       <h1 className="text-3xl font-bold mb-6">Analytics Dashboard</h1>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
