@@ -94,7 +94,6 @@ const App = () => (
               <Route path="events" element={<AdminEvents />} />
               <Route path="posts" element={<AdminPosts />} />
               <Route path="analytics" element={<AdminAnalytics />} />
-              <Route path="google-forms" element={<GoogleFormsManager />} />
               <Route path="settings" element={<AdminSettings />} />
               {/* Other admin routes will go here */}
             </Route>
