@@ -177,11 +177,11 @@ export default function AdminPosts() {
   };
 
   if (loading) {
-    return <div className="container mx-auto py-8">Loading posts...</div>;
+    return <div className="container mx-auto pt-20">Loading posts...</div>;
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto pt-20">
       <h1 className="text-3xl font-bold mb-6">Content Management (Posts)</h1>
       <div className="rounded-md border">
         <Table>
