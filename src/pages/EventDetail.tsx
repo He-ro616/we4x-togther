@@ -247,7 +247,10 @@ export default function EventDetail() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
-                  <span>{eventDate ? format(eventDate, 'p') : 'N/A'}</span>
+                  <span>
+                    {eventDate ? format(eventDate, 'p') : 'N/A'}
+                    {event.end_date && ` - ${format(new Date(event.end_date), 'p')}`}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-primary" />
