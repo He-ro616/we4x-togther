@@ -15,6 +15,7 @@ import PostCreate from "./pages/PostCreate";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile"; // Import Profile
+import UserProfile from "./pages/UserProfile"; // Import UserProfile
 import EventCreate from "./pages/EventCreate"; // Import EventCreate
 import EventDetail from "./pages/EventDetail"; // Import EventDetail
 import Notifications from "./pages/Notifications"; // Import Notifications
@@ -73,6 +74,7 @@ const App = () => (
                 <Profile />
               </ProtectedRoute>
             } />
+            <Route path="/users/:userId" element={<UserProfile />} />
             <Route path="/notifications" element={
               <ProtectedRoute>
                 <Notifications />
