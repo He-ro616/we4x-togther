@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Layout } from '@/components/layout/Layout';
@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function EventCreate() {
   const navigate = useNavigate();
+  const { eventId } = useParams<{ eventId: string }>();
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -34,6 +35,8 @@ export default function EventCreate() {
   const [imageUrl, setImageUrl] = useState('');
   const [location, setLocation] = useState('');
   const [locationType, setLocationType] = useState('in-person');
+  const [meetingLink, setMeetingLink] = useState('');
+  const [venueUrl, setVenueUrl] = useState('');
   const [eventDate, setEventDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [maxAttendees, setMaxAttendees] = useState<number | undefined>(undefined);
@@ -41,6 +44,59 @@ export default function EventCreate() {
   const [tagsInput, setTagsInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(!!eventId);
+
+  const isEditMode = !!eventId;
+
+  useEffect(() => {
+    if (eventId) {
+      fetchEvent();
+    }
+  }, [eventId]);
+
+  const fetchEvent = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('id', eventId)
+        .single();
+
+      if (error) {
+        toast({
+          title: 'Error fetching event',
+          description: error.message,
+          variant: 'destructive',
+        });
+        navigate('/dashboard');
+        return;
+      }
+
+      if (data) {
+        setTitle(data.title || '');
+        setDescription(data.description || '');
+        setShortDescription(data.short_description || '');
+        setImageUrl(data.image_url || '');
+        setLocation(data.location || '');
+        setLocationType(data.location_type || 'in-person');
+        setMeetingLink(data.meeting_link || '');
+        setVenueUrl(data.venue_url || '');
+        setMaxAttendees(data.max_attendees);
+        setTags(data.tags || []);
+        if (data.event_date) setEventDate(new Date(data.event_date));
+        if (data.end_date) setEndDate(new Date(data.end_date));
+        if (data.registration_deadline) setRegistrationDeadline(new Date(data.registration_deadline));
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAddTag = () => {
     if (tagsInput && !tags.includes(tagsInput.trim())) {
@@ -53,7 +109,7 @@ export default function EventCreate() {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
-  const handleCreateEvent = async (e: React.FormEvent) => {
+  const handleSaveEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
       toast({
@@ -65,45 +121,74 @@ export default function EventCreate() {
     }
 
     setIsSaving(true);
-    const newEvent = {
+    const eventData = {
       title,
       description,
       short_description: shortDescription,
       image_url: imageUrl,
       location,
       location_type: locationType,
+      meeting_link: meetingLink || null,
+      venue_url: venueUrl || null,
       event_date: eventDate?.toISOString(),
       end_date: endDate?.toISOString(),
       max_attendees: maxAttendees,
       registration_deadline: registrationDeadline?.toISOString(),
       tags,
-      created_by: user.id,
+      ...(isEditMode ? {} : { created_by: user.id }),
     };
 
-    const { error } = await supabase.from('events').insert([newEvent]);
+    try {
+      if (isEditMode) {
+        const { error } = await supabase
+          .from('events')
+          .update(eventData)
+          .eq('id', eventId);
 
-    if (error) {
+        if (error) throw error;
+        toast({
+          title: 'Event updated!',
+          description: 'Your event has been updated successfully.',
+        });
+      } else {
+        const { error } = await supabase.from('events').insert([eventData]);
+
+        if (error) throw error;
+        toast({
+          title: 'Event created!',
+          description: 'Your event has been created successfully.',
+        });
+      }
+      navigate('/dashboard');
+    } catch (error: any) {
       toast({
-        title: 'Error creating event',
+        title: isEditMode ? 'Error updating event' : 'Error creating event',
         description: error.message,
         variant: 'destructive',
       });
-    } else {
-      toast({
-        title: 'Event created!',
-        description: 'Your event has been created successfully.',
-      });
-      navigate('/dashboard'); // Or navigate to event detail page
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="font-display text-4xl font-bold mb-8 text-center">Create New Event</h1>
+        <h1 className="font-display text-4xl font-bold mb-8 text-center">
+          {isEditMode ? 'Edit Event' : 'Create New Event'}
+        </h1>
 
-        <form onSubmit={handleCreateEvent} className="space-y-6">
+        <form onSubmit={handleSaveEvent} className="space-y-6">
           <div>
             <Label htmlFor="title">Event Title</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -138,7 +223,7 @@ export default function EventCreate() {
           </div>
 
           <div>
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">Location / Address</Label>
             <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} required />
           </div>
 
@@ -154,6 +239,30 @@ export default function EventCreate() {
                 <SelectItem value="hybrid">Hybrid</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="meetingLink">Meeting Link (for Virtual/Hybrid)</Label>
+            <Input
+              id="meetingLink"
+              type="url"
+              value={meetingLink}
+              onChange={(e) => setMeetingLink(e.target.value)}
+              placeholder="e.g., https://zoom.us/j/123456 or https://meet.google.com/..."
+            />
+            <p className="text-xs text-muted-foreground mt-1">Add Zoom, Google Meet, Teams, or other meeting platform link</p>
+          </div>
+
+          <div>
+            <Label htmlFor="venueUrl">Venue Website / More Info</Label>
+            <Input
+              id="venueUrl"
+              type="url"
+              value={venueUrl}
+              onChange={(e) => setVenueUrl(e.target.value)}
+              placeholder="e.g., https://venue-name.com or direction link"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Link to venue information or Google Maps</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -261,7 +370,9 @@ export default function EventCreate() {
                 }}
                 placeholder="Add tags (e.g., tech, community)"
               />
-              <Button type="button" onClick={handleAddTag}>Add</Button>
+              <Button type="button" onClick={handleAddTag}>
+                Add
+              </Button>
             </div>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag, index) => (
@@ -284,8 +395,11 @@ export default function EventCreate() {
           <Button type="submit" className="w-full glow-primary" disabled={isSaving}>
             {isSaving ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {isEditMode ? 'Updating...' : 'Creating...'}
               </>
+            ) : isEditMode ? (
+              'Update Event'
             ) : (
               'Create Event'
             )}
