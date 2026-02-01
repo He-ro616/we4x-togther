@@ -210,6 +210,11 @@ export default function EventDetail() {
               <Button onClick={handleShare} variant="outline" size="icon">
                 <Share2 className="h-4 w-4" />
               </Button>
+              {user?.id === event.created_by && (
+                <Button onClick={() => navigate(`/dashboard/events/${event.id}/edit`)} variant="outline">
+                  Edit Event
+                </Button>
+              )}
               {isRegistered ? (
                 <Button onClick={handleUnregister} disabled={isProcessingRegistration} variant="outline">
                   {isProcessingRegistration ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -248,6 +253,22 @@ export default function EventDetail() {
                   <MapPin className="h-5 w-5 text-primary" />
                   <span>{event.location} ({event.location_type})</span>
                 </div>
+                {event.meeting_link && (
+                  <div className="flex items-center gap-2">
+                    <LinkIcon className="h-5 w-5 text-primary" />
+                    <a href={event.meeting_link} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
+                      Join Meeting
+                    </a>
+                  </div>
+                )}
+                {event.venue_url && (
+                  <div className="flex items-center gap-2">
+                    <LinkIcon className="h-5 w-5 text-primary" />
+                    <a href={event.venue_url} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
+                      Venue Information
+                    </a>
+                  </div>
+                )}
                 {event.website && (
                     <div className="flex items-center gap-2">
                         <LinkIcon className="h-5 w-5 text-primary" />
