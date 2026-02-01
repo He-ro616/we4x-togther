@@ -80,9 +80,15 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to={`/users/${user.id}`} className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      View Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/profile" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
-                      Profile
+                      Edit Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -146,8 +152,11 @@ export function Navbar() {
                   <Link to="/dashboard" className="text-muted-foreground hover:text-foreground px-2" onClick={() => setIsOpen(false)}>
                     Dashboard
                   </Link>
+                  <Link to={`/users/${user.id}`} className="text-muted-foreground hover:text-foreground px-2" onClick={() => setIsOpen(false)}>
+                    View Profile
+                  </Link>
                   <Link to="/profile" className="text-muted-foreground hover:text-foreground px-2" onClick={() => setIsOpen(false)}>
-                    Profile
+                    Edit Profile
                   </Link>
                   <Link to="/notifications" className="text-muted-foreground hover:text-foreground px-2" onClick={() => setIsOpen(false)}>
                     Notifications
