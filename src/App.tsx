@@ -27,7 +27,6 @@ import AdminPosts from "./pages/admin/Posts"; // Import AdminPosts
 import AdminAnalytics from "./pages/admin/Analytics"; // Import AdminAnalytics
 import AdminSettings from "./pages/admin/Settings"; // Import AdminSettings
 import AdminControlCenter from "./pages/admin/ControlCenter"; // Import AdminControlCenter
-import GoogleFormsManager from "./pages/admin/GoogleForms"; // Import GoogleFormsManager
 import PrivacyPolicy from "./pages/PrivacyPolicy"; // Import PrivacyPolicy
 import EventRegister from "./pages/EventRegister";
 
