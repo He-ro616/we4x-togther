@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, Users, Calendar, Rss, Settings, Sliders } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, Rss, Settings, Sliders, FileText } from 'lucide-react';
 
 export function AdminSidebar() {
   const adminNavLinks = [
@@ -8,6 +8,7 @@ export function AdminSidebar() {
     { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/events', label: 'Events', icon: Calendar },
     { href: '/admin/posts', label: 'Posts', icon: Rss },
+    { href: '/admin/google-forms', label: 'Google Forms', icon: FileText },
     { href: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
