@@ -67,6 +67,7 @@ const App = () => (
             }>
               <Route index element={<Dashboard />} />
               <Route path="events/new" element={<EventCreate />} /> {/* New Event Create Route */}
+              <Route path="events/:eventId/edit" element={<EventCreate />} /> {/* Edit Event Route */}
             </Route>
 
             <Route path="/profile" element={
