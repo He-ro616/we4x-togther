@@ -38,7 +38,9 @@ export default function EventCreate() {
   const [meetingLink, setMeetingLink] = useState('');
   const [venueUrl, setVenueUrl] = useState('');
   const [eventDate, setEventDate] = useState<Date | undefined>(undefined);
+  const [eventStartTime, setEventStartTime] = useState('10:00');
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [endTime, setEndTime] = useState('11:00');
   const [maxAttendees, setMaxAttendees] = useState<number | undefined>(undefined);
   const [registrationDeadline, setRegistrationDeadline] = useState<Date | undefined>(undefined);
   const [tagsInput, setTagsInput] = useState('');
@@ -83,8 +85,20 @@ export default function EventCreate() {
         setVenueUrl(data.venue_url || '');
         setMaxAttendees(data.max_attendees);
         setTags(data.tags || []);
-        if (data.event_date) setEventDate(new Date(data.event_date));
-        if (data.end_date) setEndDate(new Date(data.end_date));
+        if (data.event_date) {
+          const eventDateObj = new Date(data.event_date);
+          setEventDate(eventDateObj);
+          const hours = String(eventDateObj.getHours()).padStart(2, '0');
+          const mins = String(eventDateObj.getMinutes()).padStart(2, '0');
+          setEventStartTime(`${hours}:${mins}`);
+        }
+        if (data.end_date) {
+          const endDateObj = new Date(data.end_date);
+          setEndDate(endDateObj);
+          const hours = String(endDateObj.getHours()).padStart(2, '0');
+          const mins = String(endDateObj.getMinutes()).padStart(2, '0');
+          setEndTime(`${hours}:${mins}`);
+        }
         if (data.registration_deadline) setRegistrationDeadline(new Date(data.registration_deadline));
       }
     } catch (error: any) {
@@ -121,6 +135,24 @@ export default function EventCreate() {
     }
 
     setIsSaving(true);
+    
+    // Combine date and time
+    let eventDateTime: string | undefined;
+    if (eventDate) {
+      const [hours, minutes] = eventStartTime.split(':');
+      const dateWithTime = new Date(eventDate);
+      dateWithTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      eventDateTime = dateWithTime.toISOString();
+    }
+
+    let endDateTime: string | undefined;
+    if (endDate) {
+      const [hours, minutes] = endTime.split(':');
+      const dateWithTime = new Date(endDate);
+      dateWithTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      endDateTime = dateWithTime.toISOString();
+    }
+
     const eventData = {
       title,
       description,
@@ -130,8 +162,8 @@ export default function EventCreate() {
       location_type: locationType,
       meeting_link: meetingLink || null,
       venue_url: venueUrl || null,
-      event_date: eventDate?.toISOString(),
-      end_date: endDate?.toISOString(),
+      event_date: eventDateTime,
+      end_date: endDateTime,
       max_attendees: maxAttendees,
       registration_deadline: registrationDeadline?.toISOString(),
       tags,
@@ -293,6 +325,18 @@ export default function EventCreate() {
             </div>
 
             <div>
+              <Label htmlFor="eventStartTime">Start Time</Label>
+              <Input
+                id="eventStartTime"
+                type="time"
+                value={eventStartTime}
+                onChange={(e) => setEventStartTime(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <Label htmlFor="endDate">End Date (Optional)</Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -316,6 +360,16 @@ export default function EventCreate() {
                   />
                 </PopoverContent>
               </Popover>
+            </div>
+
+            <div>
+              <Label htmlFor="endTime">End Time (Optional)</Label>
+              <Input
+                id="endTime"
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+              />
             </div>
           </div>
 
