@@ -133,11 +133,11 @@ export default function AdminEvents() {
   };
 
   if (loading) {
-    return <div className="container mx-auto py-8">Loading events...</div>;
+    return <div className="container mx-auto pt-20">Loading events...</div>;
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto pt-20">
       <h1 className="text-3xl font-bold mb-6">Event Management</h1>
       <div className="rounded-md border">
         <Table>
