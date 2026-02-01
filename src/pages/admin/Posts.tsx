@@ -35,7 +35,14 @@ export default function AdminPosts() {
     try {
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, content, created_at, is_published, profiles(full_name, email))') // Include profiles with email
+        .select(`
+          id, 
+          title, 
+          content, 
+          created_at, 
+          is_published,
+          author_id
+        `)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -48,7 +55,29 @@ export default function AdminPosts() {
         return;
       }
 
-      setPosts(data || []);
+      // If we have posts, fetch author profiles separately
+      if (data && data.length > 0) {
+        const authorIds = [...new Set(data.map(p => p.author_id).filter(Boolean))];
+        
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('user_id, full_name, email')
+          .in('user_id', authorIds);
+
+        const profileMap = new Map();
+        (profiles || []).forEach(p => {
+          profileMap.set(p.user_id, p);
+        });
+
+        const postsWithProfiles: PostWithAuthor[] = (data || []).map(post => ({
+          ...post,
+          profiles: profileMap.get(post.author_id) || null,
+        }));
+
+        setPosts(postsWithProfiles);
+      } else {
+        setPosts(data || []);
+      }
     } catch (err: any) {
       toast({
         title: 'Error',
