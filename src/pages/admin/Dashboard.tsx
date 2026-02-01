@@ -200,7 +200,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="container mx-auto pt-20 py-8 px-2 sm:px-4">
+      <div className="container mx-auto pt-20 pt-20 px-2 sm:px-4">
         <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
         <p className="text-lg">Loading analytics...</p>
       </div>
